@@ -165,3 +165,14 @@ Bob	bob@test.com
 
 
 
+🧰 Scripts
+Command	Description
+npm run dev	Run backend in dev mode
+npm start	Run frontend (Expo)
+node scripts/seed.js	Add demo users
+🛡️ Environment Variables
+Key	Description	Example
+PORT	Server Port	4000
+MONGO_URI	MongoDB URI	mongodb://127.0.0.1:27017/chatdb
+JWT_SECRET	JWT signing key	mysupersecret
+
