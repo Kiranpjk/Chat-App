@@ -163,30 +163,5 @@ Bob	bob@test.com
 
 ✅✅ = Read
 
-🧩 Demo Video
 
-🎥 A 5-minute walkthrough showing:
 
-Login / Register
-
-User list
-
-Realtime 1:1 chat
-
-Typing indicator
-
-Read receipts
-
-(Attach Google Drive or YouTube link here)
-
-🧰 Scripts
-Command	Description
-npm run dev	Run backend in dev mode
-npm start	Run frontend (Expo)
-node scripts/seed.js	Add demo users
-🛡️ Environment Variables
-Key	Description	Example
-PORT	Server Port	4000
-MONGO_URI	MongoDB URI	mongodb://127.0.0.1:27017/chatdb
-
-JWT_SECRET	JWT signing key	mysupersecret
