@@ -91,7 +91,7 @@ typing:stop	Client → Server	Notify receiver typing stopped
 typing:update	Server → Client	Update typing state on receiver side
 ⚙️ Setup & Installation
 1️⃣ Clone Repository
-git clone https://github.com/yourusername/chat-app.git
+git clone https://github.com/Kiranpjk/Chat-App.git
 cd chat-app
 
 2️⃣ Backend Setup
@@ -175,4 +175,5 @@ Key	Description	Example
 PORT	Server Port	4000
 MONGO_URI	MongoDB URI	mongodb://127.0.0.1:27017/chatdb
 JWT_SECRET	JWT signing key	mysupersecret
+
 
