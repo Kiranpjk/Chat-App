@@ -1,4 +1,3 @@
-// server/index.js
 require("dotenv").config();
 const express = require("express");
 const http = require("http");
@@ -8,18 +7,13 @@ const { Server } = require("socket.io");
 const User = require("./models/User");
 const Conversation = require("./models/Conversation");
 const Message = require("./models/Message");
-
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-// ✅ MongoDB connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => console.error("MongoDB error:", err));
-
-// ✅ REST routes
 app.get("/users", async (req, res) => {
   try {
     const users = await User.find({}, { password: 0, __v: 0 });
@@ -28,7 +22,6 @@ app.get("/users", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 app.get("/conversations", async (req, res) => {
   const { user1, user2 } = req.query;
   if (!user1 || !user2)
@@ -94,26 +87,16 @@ app.get("/conversations/user/:userId", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// ✅ Create HTTP + Socket.IO server FIRST
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
-
-// ✅ Keep only one online user tracker
 const onlineUsers = new Map();
-
-// ✅ Socket.IO logic
 io.on("connection", (socket) => {
   console.log("⚡ Client connected:", socket.id);
-
-  // 🟢 User joins
   socket.on("user:join", (userId) => {
     onlineUsers.set(userId, socket.id);
     io.emit("user:online", Array.from(onlineUsers.keys()));
     console.log(`🟢 User ${userId} online`);
   });
-
-  // 💬 Message sending
   socket.on("message:send", async (data) => {
     try {
       const { from, to, text } = data;
@@ -182,21 +165,16 @@ io.on("connection", (socket) => {
       console.error("❌ Read receipt error:", err);
     }
   });
-
-  // ✍️ Typing indicator
   socket.on("typing:start", ({ from, to }) => {
     const receiverSocket = onlineUsers.get(to);
     if (receiverSocket)
       io.to(receiverSocket).emit("typing:update", { from, typing: true });
   });
-
   socket.on("typing:stop", ({ from, to }) => {
     const receiverSocket = onlineUsers.get(to);
     if (receiverSocket)
       io.to(receiverSocket).emit("typing:update", { from, typing: false });
   });
-
-  // 🔴 On disconnect
   socket.on("disconnect", () => {
     for (let [uid, sid] of onlineUsers.entries()) {
       if (sid === socket.id) {
@@ -208,8 +186,6 @@ io.on("connection", (socket) => {
     }
   });
 });
-
-// ✅ Start server
 const PORT = process.env.PORT || 4000;
 server.listen(PORT, "0.0.0.0", () =>
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`)
